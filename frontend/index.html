@@ -66,26 +66,50 @@
 
     let id = ""
 
-    fetch("http://172.19.25.27:8000/api/v1/return_person", {
-        method: "POST",
-        headers: { "Accept": "application/json" },
-        body: {full_name: "Иванов Иван"}
-      })
-      .then(res => res.json())
-      .then(data => {id = data.data[0]; console.log(id); return 0})
-      .catch(err => console.log(err.code + err.status))
+    // fetch("http://172.19.25.27:8000/api/v1/return_person", {
+    //     method: "POST",
+    //     headers: { "Accept": "application/json" },
+    //     body: {full_name: "Иванов Иван"}
+    //   })
+    //   .then(res => res.json())
+    //   .then(data => {id = data.data[0]; console.log(id); return 0})
+    //   .catch(err => console.log(err.code + err.status))
 
 
 
-    fetch("http://172.19.25.27:8000/api/v1/return_reception", {
-        method: "POST",
-        headers: { "Accept": "application/json" },
-        body: ""
-      })
-        .then(res => res.json())
-        .then(data => {visits = data; console.log(visits); return 0})
-        .catch(err => console.log(err.code + err.status))
+    // fetch("http://172.19.25.27:8000/api/v1/return_reception", {
+    //     method: "POST",
+    //     headers: { "Accept": "application/json" },
+    //     body: ""
+    //   })
+    //     .then(res => res.json())
+    //     .then(data => {visits = data; console.log(visits); return 0})
+    //     .catch(err => console.log(err.code + err.status))
     
+    fetch("http://172.19.25.27:8000/api/v1/return_person", {
+    method: "POST",
+    headers: { "Accept": "application/json" },
+    body: JSON.stringify({full_name: "Иванов Иван"})
+})
+    .then(res => res.json())
+    .then(data => {
+        id = data.data[0];
+        console.log(id);
+        
+        return fetch("http://172.19.25.27:8000/api/v1/return_reception", {
+            method: "POST",
+            headers: JSON.stringify({ "Accept": "application/json" }),
+            body: {id: id}
+        });
+    })
+    .then(res => res.json())
+    .then(data => {
+        visits = data;
+        console.log(visits);
+    })
+    .catch(err => console.log(err.code + err.status));
+
+
     hVisits = visits.map(item => 
         {
             let div = document.createElement("div")
