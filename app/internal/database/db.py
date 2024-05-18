@@ -3,7 +3,9 @@ import asyncio
 from dotenv import load_dotenv
 import warnings
 import os
-import random
+
+from dateutil.relativedelta import relativedelta
+from datetime import datetime
 
 load_dotenv()
 
@@ -67,7 +69,7 @@ async def create_data():
 
 
 
-async def add_new_person(patient_data):
+async def add_new_person(person_data):
     connection = None
 
     try:
@@ -82,23 +84,19 @@ async def add_new_person(patient_data):
 
         with connection.cursor() as cursor:
             query = """
-            INSERT INTO people 
-            (id, full_name, age, parents_name, address, date_of_visit, specialists_name, meeting_format, personal_factors, neurosurgery, 
-            sensitivity, neurourology, mobility, self_service, TCP, neuroorthopedics, coloproctology, productive_activity, leisure, communication, 
-            ophthalmology, height_and_weight, smart_functions, pain, tasks, other)
-            VALUES 
-            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """
+                        INSERT INTO people
+                        (Fullname, Birthdate, PhoneNumber, MotherFullname, City, Email) 
+                        VALUES 
+                        (%s, %s, %s, %s, %s, %s)
+                        """
 
             values = (
-                patient_data.id, patient_data.full_name, patient_data.age, patient_data.parents_name,
-                patient_data.address, patient_data.date_of_visit, patient_data.specialists_name,
-                patient_data.meeting_format, patient_data.personal_factors, patient_data.neurosurgery,
-                patient_data.sensitivity, patient_data.neurourology, patient_data.mobility,
-                patient_data.self_service, patient_data.TCP, patient_data.neuroorthopedics,
-                patient_data.coloproctology, patient_data.productive_activity, patient_data.leisure,
-                patient_data.communication, patient_data.ophthalmology, patient_data.height_and_weight,
-                patient_data.smart_functions, patient_data.pain, patient_data.tasks, patient_data.other
+                person_data.full_name,
+                person_data.birthdate,
+                person_data.phone_number,
+                person_data.mother_full_name,
+                person_data.city,
+                person_data.email
             )
 
             cursor.execute(query, values)
@@ -130,7 +128,7 @@ async def return_person(full_name):
         connection.autocommit = True
 
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM people WHERE full_name = %s", (full_name,))
+            cursor.execute("SELECT * FROM people WHERE fullname = %s", (full_name,))
             person_data = cursor.fetchone()
 
 
@@ -142,11 +140,20 @@ async def return_person(full_name):
         if connection:
             connection.close()
 
-        return person_data
+        print(person_data)
+
+        birth_date = datetime(person_data[2].year, person_data[2].month, person_data[2].day)
+        current_date = datetime.now()
+        age = relativedelta(current_date, birth_date)
+        if age.years >= 1:
+            return list(person_data) + [f"{age.years} лет"]
+        else:
+            return list(person_data) + [f"{age.month} мес."]
 
 
 
-async def add_new_reception(person):
+
+async def add_new_reception(patient_data):
     connection = None
 
     try:
@@ -161,19 +168,28 @@ async def add_new_reception(person):
 
         with connection.cursor() as cursor:
             query = """
-                INSERT INTO reception (
-                    id, full_name, full_name_doctor, date, age, gestational_age, premature, CLAMS, CAT, GM
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO reception 
+                (id, full_name, age, parents_name, address, date_of_visit, specialists_name, meeting_format, personal_factors, neurosurgery, 
+                sensitivity, neurourology, mobility, self_service, TCP, neuroorthopedics, coloproctology, productive_activity, leisure, communication, 
+                ophthalmology, height_and_weight, smart_functions, pain, tasks, other)
+                VALUES 
+                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
+
             values = (
-                person.id, person.full_name, person.full_name_doctor, person.date,
-                person.age, person.gestational_age, person.premature,
-                person.CLAMS, person.CAT, person.GM
+                patient_data.id, patient_data.full_name, patient_data.age, patient_data.parents_name,
+                patient_data.address, patient_data.date_of_visit, patient_data.specialists_name,
+                patient_data.meeting_format, patient_data.personal_factors, patient_data.neurosurgery,
+                patient_data.sensitivity, patient_data.neurourology, patient_data.mobility,
+                patient_data.self_service, patient_data.TCP, patient_data.neuroorthopedics,
+                patient_data.coloproctology, patient_data.productive_activity, patient_data.leisure,
+                patient_data.communication, patient_data.ophthalmology, patient_data.height_and_weight,
+                patient_data.smart_functions, patient_data.pain, patient_data.tasks, patient_data.other
             )
+
             cursor.execute(query, values)
 
-
-            print("[INFO] Table add")
+        print("[INFO] Table created")
 
     except Exception as _ex:
         warnings.warn(f"Error: {_ex}")
@@ -201,6 +217,37 @@ async def return_reception(id):
 
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM reception WHERE id = %s", (id,))
+            reception_data = cursor.fetchall()
+
+        print(reception_data)
+
+    except Exception as _ex:
+        warnings.warn(f"Error: {_ex}")
+        return "error"
+
+    finally:
+        if connection:
+            connection.close()
+
+        return reception_data
+
+
+
+async def return_all_users():
+    connection = None
+
+    try:
+        connection = psycopg2.connect(
+            host=HOST,
+            port=PORT,
+            user=USER,
+            password=PASSWORD,
+            database=DB_NAME
+        )
+        connection.autocommit = True
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM reception")
             reception_data = cursor.fetchall()
 
         print(reception_data)
