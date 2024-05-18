@@ -1,0 +1,100 @@
+:root{
+    color: #203062;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+button{
+    background-color: #74B7D3;
+    border: none;
+    padding: 8px 20px;
+    color: white;
+    border-radius: 1.2vh;
+}
+
+h3{
+    margin: 0;
+}
+
+.header{
+    background: linear-gradient(90deg, #7bcccd, #7fa8d1, #C9A1DD);
+    height: 100px;
+    margin-bottom: 12px;
+}
+
+span{
+    font-size: ;
+}
+
+.profile > div{
+    /* margin-bottom: 12px; */
+    border-bottom: 1px solid #D9D9D9;
+    padding-bottom: 12px;
+    padding: 10px;
+}
+
+/* --------------------------------------General */
+.general_info{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.flex-column{
+    display: flex;
+    flex-direction: column;
+    justify-content: baseline;
+    align-items: left;
+}
+/* -------------------------------Профиль */
+.profile{
+    border-bottom: 1px solid #D9D9D9;
+}
+
+.span-flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* -------------------------------Профиль : визиты */
+.div-visit{
+    display: flex;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0 4 #6889BB;
+    border-radius: 16px;
+}
+
+.visit--general{
+    display: flex;
+    flex-direction: column;
+    justify-content: baseline;
+    align-items: left;
+}
+
+/* ----------------------------------- Daigrams*/
+
+.diagrams{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+/* -----------------------------------DataBase */
+.database{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+}
+
+/* ----------------------------------- */
+@media(max-width: 500px){
+    span{
+        font-size: 15px;
+    }
+}

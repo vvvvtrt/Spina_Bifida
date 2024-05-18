@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spina Bifida</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <header class="header">
+
+    </header>
+
+    <div class="profile">
+        <div class="general_info">
+            <img src="./src/profile.svg">
+            <div class="flex-column">
+                <span class="name">ИВАНОВ Иван Иванович</span>
+                <span class="birthday">Дата рождения: </span>
+                <span class="city">Город: Санкт-Петербург</span>
+                <span class="parent"></span>
+            </div>
+        </div>
+        <div class="use-data">
+            <!-- data-picker -->
+                <span id="date"></span>           
+                <span id="doctorName">Врач</span>
+                <button class="add-visit">Новый приём</button>
+        </div>
+        <div>
+            <span class="span-flex"><h3>Приёмы</h3> <img src="./src/Filter.svg"></span>
+            <div id="visits">
+            </div>
+        </div>
+        <div>
+            <h3>Динамика</h3>
+            <div id="diagrams" class="diagrams">
+                <div class="chart-container" style="position: relative; height:200px; width:33vw">
+                    <canvas id="chart-1"></canvas>
+                </div>
+                <div class="chart-container" style="position: relative; height:200px; width:33vw">
+                    <canvas id="chart-2"></canvas>
+                </div>
+                <div class="chart-container" style="position: relative; height:200px; width:33vw">
+                    <canvas id="chart-3"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="database">
+
+    </div>
+
+    <div class="usercard" id="usercard"></div>
+</body>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<Script>
+    let date = document.getElementById("date")
+    date.value = new Date()
+
+    // добавить визиты
+    const visitContain = document.getElementById("visits")
+    let visits = []
+
+    fetch("http://172.19.25.27:8000/api/v1/return_reception", {
+        // fetch("http://127.0.0.1:8000/api/v1/return_reception", {
+
+        method: "GET"})
+        .then(res => res.json())
+        .then(data => {visits = data; console.log(visits); return 0})
+        .catch(err => console.log(err.code + err.status))
+    
+    hVisits = visits.map(item => 
+        {
+            let div = document.createElement("div")
+            div.className = "div-visit"
+            div.innerHTML =  '<div class="visit--general">'+ 
+                "Показатель 1 <span style={background-color: #FFEE56}>" + item.clams + "</span>" +
+                "Показатель 2 <span style={background-color: #73ED78}>" + item.cat + "</span>" +
+                "Показатель 3 <span style={background-color: #ED7373}>" + item.gm + "</span>" +
+            '</div>'
+            +  '<div class="visit--text">'+ 
+            item.doctor +
+            '<button class="show-visit">Смотреть</button>' +
+            '</div>'
+
+            visitContain.append(div)
+
+            // let temp = document.createElement("span")
+            // temp.innerText = item.date
+            // div.appendChild(temp)
+
+            // temp = document.createElement("span")
+            // temp.innerText = item.age
+            // div.appendChild(temp)
+
+            // temp = document.createElement("span")
+            // temp.innerHTML = "Показатель 1 <span style={background-color: #FFEE56}>" + item.clams + "</span>"
+            // div.appendChild(temp)
+
+            // temp = document.createElement("span")
+            // temp.innerHTML = "Показатель 2 <span style={background-color: #73ED78}>" + item.cat + "</span>"
+            // div.appendChild(temp)
+
+            // temp = document.createElement("span")
+            // temp.innerHTML = "Показатель 3 <span style={background-color: #ED7373}>" + item.gm + "</span>"
+            // div.appendChild(temp)
+//
+        }
+    )
+
+    //--------------- построить диаграммы    
+    const ctx = document.getElementById('chart-1');
+    const ctx2 = document.getElementById('chart-2');
+    const ctx3 = document.getElementById('chart-3');
+
+    let di1 = visits.map(item => [item.date, item.clams])
+    let di2 = visits.map(item => [item.date, item.cat])
+    let di3 = visits.map(item => [item.date, item.gm]) 
+    
+    new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: di1.map[item => item[0]],
+      datasets: [{
+        label: '# of Votes',
+        data: di1.map[item => item[1]],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+  });
+
+  new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: di2.map[item => item[0]],
+      datasets: [{
+        label: '# of Votes',
+        data: di2.map[item => item[1]],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+  });
+
+  new Chart(ctx3, {
+    type: 'line',
+    data: {
+      labels: di3.map[item => item[0]],
+      datasets: [{
+        label: '# of Votes',
+        data: di3.map[item => item[1]],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+  });
+
+
+
+</Script>
+</html>
