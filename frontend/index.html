@@ -5,13 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spina Bifida</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <!-- <link rel="stylesheet" href="datepicker.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="datepicker.material.css">
+    <script src="datepicker.js"></script>
 </head>
 <body>
     <header class="header">
-
+      <div id="header-database">
+        <h1>База подопечных</h1>
+        <button class="btn-header"><img src="./src/Search.svg"  onclick="showSearchBox()"></button>
+        <input id="search-box">
+      </div>
+      <div id="header-profile" style="display: none;">
+        <button class="btn-header" id="btn--back-db"><img src="./src/Back.svg"></button>
+        <h1>Подопечный</h1>
+        <button class="btn-header"><img src="./src/Edit.svg"></button>
+      </div>
+      <div id="header-visit" style="display: none;">
+        <button class="btn-header" id="btn--back-visits"><img src="./src/Back.svg"></button>
+        <h1>Приём</h1>
+      </div>
+      <div id="header-pation" style="display: none;">
+        <button class="btn-header"><img src="./src/Search.svg"></button>
+        <h1>Новый пациент</h1>
+      </div>
     </header>
 
-    <div class="profile">
+    <div class="database" id="database">
+      <div class="person db-click">
+        <div class="general_info">
+          <img src="./src/profile.svg">
+          <div class="flex-column">
+              <span class="name">ИВАНОВ Иван Иванович</span>
+              <span class="age">7 лет</span>
+              <span class="birthday">Дата рождения: </span>
+              <span class="city">Город: Санкт-Петербург</span>
+          </div>
+      </div>
+  </div>
+  </div>
+
+  <div class="profile" style="display: none;" id="profile">
         <div class="general_info">
             <img src="./src/profile.svg">
             <div class="flex-column">
@@ -22,10 +56,11 @@
             </div>
         </div>
         <div class="use-data">
-            <!-- data-picker -->
-                <span id="date"></span>           
-                <span id="doctorName">Врач</span>
-                <button class="add-visit">Новый приём</button>
+            <div div="flex-row --grey">
+              <span id="date"></span>    
+              <span id="doctorName">Врач</span>
+            </div>
+                <button class="add-visit" id="add-visit">Новый приём</button>
         </div>
         <div>
             <span class="span-flex"><h3>Приёмы</h3> <img src="./src/Filter.svg"></span>
@@ -48,55 +83,324 @@
         </div>
     </div>
 
-    <div class="database">
+  <div class="visit" id="visit" style="display: none;" >
+      <div class="flex-row">
+        <div>
+          <span>Дата визита:</span>
+          <span class="age">7 лет</span>
+        </div>
+        <div>
+          <span>Имя врача</span>
+          <span>Статус</span>
+        </div>
+      </div>
+    <div class="flex-params">
+      <div class="flex-column">
+        <span>Показатель 1: </span>
+        <span>Показатель 2: </span>
+        <span>Показатель 3: </span>
 
+      </div>
+      <div class="chart">
+        <canvas id="chart-visit" width="200" height="200"></canvas>
+      </div>
+    </div>
+    <div class="analysis">
+      <form>
+      <div>
+        <h3>Нарушение структур и функций</h3>
+        <div>  
+          <div>
+            <h4>Нейрохирургия</h4>
+            <textarea placeholder="Добавить описание" rows="1"></textarea>
+          </div>
+          <div>
+            <h4>Нейроурология</h4>
+            <textarea placeholder="Добавить описание" rows="1"></textarea>
+          </div>
+          <div>
+            <h4>Росто-весовые характеристики</h4>
+            <textarea placeholder="Добавить описание" rows="1"></textarea>
+          </div>
+          <div>
+            <h4>Нейроортопедия</h4>
+            <textarea placeholder="Добавить описание" rows="1"></textarea>
+          </div>
+          <div>
+            <h4>Интеллектуальные функции</h4>
+            <textarea placeholder="Добавить описание" rows="1"></textarea>
+          </div>
+          <div>
+            <h4>Чувствительность</h4>
+            <textarea placeholder="Добавить описание" rows="1"></textarea>
+          </div>
+          <div>
+            <h4>Колопроктология</h4>
+            <textarea placeholder="Добавить описание" rows="1"></textarea>
+          </div>
+          <div>
+            <h4>Целостность кожных покровов</h4>
+            <textarea placeholder="Добавить описание" rows="1"></textarea>
+          </div>
+          <div>
+            <h4>Боль</h4>
+            <textarea placeholder="Добавить описание" rows="1"></textarea>
+          </div>
+        </div>
+    </div>
+    <div>
+      <h3>Активность и участие</h3>
+      <div>
+      <div>
+        <h4>Мобильность</h4>
+        <textarea placeholder="Добавить описание" rows="1"></textarea>
+      </div>
+      <div>
+        <h4>Участие</h4>
+        <textarea placeholder="Добавить описание" rows="1"></textarea>
+      </div>
+      <div>
+        <h4>Продуктивная деятельность</h4>
+        <textarea placeholder="Добавить описание" rows="1"></textarea>
+      </div>
+      <div>
+        <h4>Самообслуживание</h4>
+        <textarea placeholder="Добавить описание" rows="1"></textarea>
+      </div>
+      <div>
+        <h4>Досуг</h4>
+        <textarea placeholder="Добавить описание" rows="1"></textarea>
+      </div>
+      <div>
+        <h4>Коммуникация</h4>
+        <textarea placeholder="Добавить описание" rows="1"></textarea>
+      </div>
+    </div>
+      <div>
+        <h3>Запрос к фонду</h3>
+        <textarea placeholder="Добавить описание" rows="1"></textarea>
+      </div>
+      <div>
+        <h3>Комментарии</h3>
+        <textarea placeholder="Добавить описание" rows="1"></textarea>
+      </div>
+
+      <div>
+        <h3>Рекоммендации</h3>
+        <checkbox>
+          <option>Добавить рекоммендацию</option>
+        </checkbox>
+        <textarea placeholder="Добавить описание" rows="1"></textarea>
+      </div>
+    </div>
+    </div>
+    <button type="submit">Сохранить</button>
+  </form>
+  
     </div>
 
-    <div class="usercard" id="usercard"></div>
+</div>
+
+  <div class="add-patient">
+    
+  </div>
+
+ 
+  
+
+
 </body>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/js-datepicker@1.0.4/datepicker.min.js"></script> -->
 <Script>
-    let date = document.getElementById("date")
-    date.value = new Date()
+// -------------------------general
+function createPersonInfo(personData) {
+  generalInfo.querySelector('.name').textContent = personData.name;
+    generalInfo.querySelector('.birthday').textContent = "Дата рождения: " + personData.birthday;
+    generalInfo.querySelector('.city').textContent = "Город: " + personData.city;
+}
 
-    // добавить визиты
+function showSearchBox() {
+    let searchBox = document.getElementById("search-box");
+    searchBox.style.display = "block";
+}
+
+const nameForm = document.getElementById('search-box')
+let filteredMountains = []
+// 
+nameForm.addEventListener('input', event => {
+  event.preventDefault()
+  const term = event.target.value.toLowerCase()
+  let searchResult = filteredMountains.filter(filteredMountain => {
+  return filteredMountain.name.toLowerCase().includes(term)
+  
+  })
+createMountainCards(searchResult)
+})
+// 
+
+const url = "https://b6a6-31-173-85-46.ngrok-free.app"
+
+let hdb = document.getElementById("header-database")
+let hdb2 = document.getElementById("header-profile")
+let hdb3 = document.getElementById("header-visit")
+let hdb4 = document.getElementById("header-pation")
+
+// var profile = document.getElementById("profile")
+
+let btnAddVist = document.getElementById("add-visit")
+
+btnAddVist.addEventListener("click", () =>{
+  hdb2.style.display = "none";
+  hdb3.style.display = "flex";
+  visit.style.display = "block";
+  profile.style.display = "none";
+
+})
+
+let visit = document.getElementById("visit")
+
+
+let btnReturnDb = document.getElementById("btn--back-db") 
+    btnReturnDb.addEventListener('click', () => {
+           hdb.style.display = "flex";
+            hdb2.style.display = "none";
+            profile.style.display = "none";
+            profile.style.display = "none";
+            db.style.display = "block";
+})
+g
+let btnReturnV = document.getElementById("btn--back-visits") 
+    btnReturnV.addEventListener('click', () => {
+           hdb2.style.display = "flex";
+            hdb3.style.display = "none";
+            visit.style.display = "none";
+            profile.style.display = "block";
+})
+
+  // ------------------- Database
+
+
+fetch(`${url}/api/v1/return_all_users`, {
+    method: "GET",
+})
+.then(res => { console.log("allUSers1: "); return res.text()})
+.then(data => {console.log(data)})
+
+
+fetch(`${url}/api/v1/return_all_users`, {
+    method: "GET",
+})
+.then(res => { console.log("allUSers: "); return res.json()})
+.then(data => {
+        console.log("yes: ", data)
+        data.data.forEach(personData => {
+        let personDiv = document.createElement('div');
+        personDiv.className = "person db-click";
+        
+        let generalInfoDiv = document.createElement('div');
+        generalInfoDiv.className = "general_info";
+        personDiv.appendChild(generalInfoDiv);
+        
+        let profileImg = document.createElement('img');
+        profileImg.src = "./src/profile.svg";
+        generalInfoDiv.appendChild(profileImg);
+        
+        let infoData = {
+            "name": personData.name,
+            "age": personData.age,
+            "birthday": "Дата рождения: " + personData.birthday,
+            "city": "Город: " + personData.address
+        };
+        
+        Object.keys(infoData).forEach(key => {
+            let spanElement = document.createElement('span');
+            spanElement.className = key;
+            spanElement.textContent = infoData[key];
+            generalInfoDiv.appendChild(spanElement);
+        });
+        
+        let db = document.getElementById("database");
+        db.appendChild(personDiv);
+        console.log([personDiv])
+
+        personDiv.addEventListener('click', () => {
+            let hdb = document.getElementById("hdb");
+            let hdb2 = document.getElementById("hdb2");
+            let profile = document.getElementById("profile");
+
+            hdb.style.display = "none";
+            hdb2.style.display = "flex";
+            db.style.display = "none";
+            profile.style.display = "block";
+
+            createPersonInfo(personData);
+        });
+    });
+})
+.catch(error => {
+    console.error("Произошла ошибка при загрузке данных:", error);
+});
+
+
+
+
+
+
+
+//
+
+
+// ------------------
+
+  let db = document.getElementById("database")
+  let profile = document.getElementById("profile")
+
+  document.querySelectorAll('.db-click').forEach(person => {
+    person.addEventListener('click', () => {
+      hdb.style.display = "none";
+          hdb2.style.display = "flex";
+        db.style.display = "none";
+        profile.style.display = "block";
+    });
+});
+
+
+// ---------------------------------
+    let date = document.getElementById("date")
+    var currentDate = new Date();
+
+  var year = currentDate.getFullYear();
+  var month = currentDate.getMonth() + 1;
+  var day = currentDate.getDate();
+
+  if (month < 10) {
+      month = '0' + month;
+  }
+  if (day < 10) {
+      day = '0' + day;
+  }
+  var formattedDate = year + '-' + month + '-' + day;
+  date.textContent = formattedDate
+
+  // ------------------------------ даты
     const visitContain = document.getElementById("visits")
     let visits = []
 
     let id = ""
-
-    // fetch("http://172.19.25.27:8000/api/v1/return_person", {
-    //     method: "POST",
-    //     headers: { "Accept": "application/json" },
-    //     body: {full_name: "Иванов Иван"}
-    //   })
-    //   .then(res => res.json())
-    //   .then(data => {id = data.data[0]; console.log(id); return 0})
-    //   .catch(err => console.log(err.code + err.status))
-
-
-
-    // fetch("http://172.19.25.27:8000/api/v1/return_reception", {
-    //     method: "POST",
-    //     headers: { "Accept": "application/json" },
-    //     body: ""
-    //   })
-    //     .then(res => res.json())
-    //     .then(data => {visits = data; console.log(visits); return 0})
-    //     .catch(err => console.log(err.code + err.status))
     
-    fetch("http://172.19.25.27:8000/api/v1/return_person", {
+    fetch(`${url}/api/v1/return_person`, {
     method: "POST",
     headers: { 'Content-Type': 'application/json;charset=utf-8'},
-    body: JSON.stringify({full_name: "Иванов Иван"})
+    body: JSON.stringify({full_name: "Иванов Иван Иванович"})
 })
     .then(res => res.json())
     .then(data => {
         id = data.data[0];
-        console.log(id);
+        console.log(data);
         
-        return fetch("http://172.19.25.27:8000/api/v1/return_reception", {
+        return fetch(`${url}/api/v1/return_reception`, {
             method: "POST",
             headers: JSON.stringify({ 'Content-Type': 'application/json;charset=utf-8' }),
             body: {id: id}
@@ -123,29 +427,7 @@
             item.doctor +
             '<button class="show-visit">Смотреть</button>' +
             '</div>'
-
             visitContain.append(div)
-
-            // let temp = document.createElement("span")
-            // temp.innerText = item.date
-            // div.appendChild(temp)
-
-            // temp = document.createElement("span")
-            // temp.innerText = item.age
-            // div.appendChild(temp)
-
-            // temp = document.createElement("span")
-            // temp.innerHTML = "Показатель 1 <span style={background-color: #FFEE56}>" + item.clams + "</span>"
-            // div.appendChild(temp)
-
-            // temp = document.createElement("span")
-            // temp.innerHTML = "Показатель 2 <span style={background-color: #73ED78}>" + item.cat + "</span>"
-            // div.appendChild(temp)
-
-            // temp = document.createElement("span")
-            // temp.innerHTML = "Показатель 3 <span style={background-color: #ED7373}>" + item.gm + "</span>"
-            // div.appendChild(temp)
-//
         }
     )
 
@@ -230,7 +512,34 @@
     }
   });
 
+  // ---------------------------------- VISIT
+  const ctx4 = document.getElementById('chart-visit');
 
+  new Chart(ctx4, {
+    type: 'line',
+    data: {
+      labels: di1.map[item => item[0]],
+      datasets: [{
+        label: 'Parameter ',
+        data: di1.map[item => item[1]],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      maintainAspectRatio: false, // Отключить пропорциональность
+        responsive: true, // Разрешить респонсивность
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+  });
 
 </Script>
 </html>
