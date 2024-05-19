@@ -142,13 +142,15 @@ async def return_person(full_name):
 
         print(person_data)
 
-        birth_date = datetime(person_data[2].year, person_data[2].month, person_data[2].day)
-        current_date = datetime.now()
-        age = relativedelta(current_date, birth_date)
-        if age.years >= 1:
-            return list(person_data) + [f"{age.years} лет"]
-        else:
-            return list(person_data) + [f"{age.month} мес."]
+        return person_data
+
+        # birth_date = datetime(person_data[2].year, person_data[2].month, person_data[2].day)
+        # current_date = datetime.now()
+        # age = relativedelta(current_date, birth_date)
+        # if age.years >= 1:
+        #     return list(person_data) + [f"{age.years} лет"]
+        # else:
+        #     return list(person_data) + [f"{age.month} мес."]
 
 
 
@@ -260,4 +262,70 @@ async def return_all_users():
         if connection:
             connection.close()
 
+        print(reception_data)
+
         return reception_data
+
+
+
+async def add_tg_id(email, tg_id):
+    connection = None
+
+    try:
+        connection = psycopg2.connect(
+            host=HOST,
+            port=PORT,
+            user=USER,
+            password=PASSWORD,
+            database=DB_NAME
+        )
+        connection.autocommit = True
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM people WHERE email = %s", (email,))
+            reception_data = cursor.fetchone()
+
+            cursor.execute("INSERT INTO tg_users (id, id_tg) VALUES (%s, %s)", (reception_data[0], tg_id))
+
+    except Exception as _ex:
+        warnings.warn(f"Error: {_ex}")
+        return "error"
+
+    finally:
+        if connection:
+            connection.close()
+
+        return reception_data
+
+
+
+async def get_table_people():
+    connection = None
+
+    try:
+        connection = psycopg2.connect(
+            host=HOST,
+            port=PORT,
+            user=USER,
+            password=PASSWORD,
+            database=DB_NAME
+        )
+        connection.autocommit = True
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM people")
+            temp = cursor.fetchall()
+            cursor.execute("SELECT column_name FROM INFORMATION_SCHEMA. COLUMNS WHERE table_name = 'people'")
+            temp2 = cursor.fetchall()
+
+        temp = [[i[0] for i in temp2]] + temp
+
+    except Exception as _ex:
+        warnings.warn(f"Error: {_ex}")
+        return "error"
+
+    finally:
+        if connection:
+            connection.close()
+
+        return temp
