@@ -402,8 +402,8 @@ fetch(`${url}/api/v1/return_all_users`, {
         
         return fetch(`${url}/api/v1/return_reception`, {
             method: "POST",
-            headers: JSON.stringify({ 'Content-Type': 'application/json;charset=utf-8' }),
-            body: {id: id}
+            headers: { 'Content-Type': 'application/json;charset=utf-8'},
+            body: JSON.stringify({"id": id})
         });
     })
     .then(res => res.json())

@@ -11,26 +11,22 @@ router = APIRouter(
 )
 
 class Return(BaseModel):
-    data: str
+    full_name: str
 
 class ReturnID(BaseModel):
-    data: int
+    id: int
 
-class DataReception(BaseModel):
+class PersonData(BaseModel):
     id: int
     full_name: str
-    full_name_doctor: str
-    date: str
-    age: str
-    gestational_age: str
-    premature: bool
-    CLAMS: int
-    CAT: int
-    GM: int
+    birthdate: str
+    phone_number: str
+    mother_full_name: str
+    city: str
+    email: str
 
 
-
-class DataPerson(BaseModel):
+class DataReception(BaseModel):
     id: int
     full_name: str
     age: str
@@ -60,20 +56,24 @@ class DataPerson(BaseModel):
 
 
 
+@router.get("/return_all_users")
+async def return_all_users():
+    return {"data": await db.return_all_users()}
+
 
 @router.post("/add_person")
-async def add_person(data: DataPerson):
+async def add_person(data: PersonData):
     return {"status": await db.add_new_person(data)}
 
-@router.get("/return_person")
+@router.post("/return_person")
 async def return_person(data: Return):
-    return {"data": await db.return_person(data.data)}
+    return {"data": await db.return_person(data.full_name)}
 
 
 @router.post("/add_reception")
 async def add_reception(data: DataReception):
     return {"status": await db.add_new_reception(data)}
 
-@router.get("/return_reception")
+@router.post("/return_reception")
 async def return_reception(data: ReturnID):
-    return {"data": await db.return_reception(data.data)}
+    return {"data": await db.return_reception(data.id)}
