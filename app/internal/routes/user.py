@@ -129,7 +129,7 @@ async def get_table_people(response: Response):
         csvwriter = csv.writer(csvfile)
         csvwriter.writerows(list(await db.get_table_people()))
 
-    with open("C:/Users/sleim/PycharmProjects/SpinaBifida/table/people.csv", "rb", encoding="utf-8") as csv_data:
+    with open("C:/Users/sleim/PycharmProjects/SpinaBifida/table/people.csv", "r", encoding="utf-8") as csv_data:
         response.headers["Content-Disposition"] = "attachment; filename=people.csv"
         response.headers["Content-Type"] = "text/csv"
         return csv_data.read()
