@@ -194,7 +194,7 @@
       </div>
     </div>
     </div>
-    <button type="submit">Сохранить</button>
+    <button type="submit" onClick="sendData">Сохранить</button>
   </form>
   
     </div>
@@ -219,6 +219,15 @@ function createPersonInfo(personData) {
   generalInfo.querySelector('.name').textContent = personData.name;
     generalInfo.querySelector('.birthday').textContent = "Дата рождения: " + personData.birthday;
     generalInfo.querySelector('.city').textContent = "Город: " + personData.city;
+}
+
+function sendData(data){
+  fetch(`${url}/api/v1/add_reception`, {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json;charset=utf-8'},
+    body: JSON.stringify(data)
+})
+
 }
 
 function showSearchBox() {
@@ -436,10 +445,10 @@ fetch(`${url}/api/v1/return_all_users`, {
     const ctx2 = document.getElementById('chart-2');
     const ctx3 = document.getElementById('chart-3');
 
-    let di1 = visits.map(item => [item.date, item.clams])
-    let di2 = visits.map(item => [item.date, item.cat])
-    let di3 = visits.map(item => [item.date, item.gm]) 
-    
+    let di1 = visits.map(item => [item[5], item[26])
+    let di2 = visits.map(item => [item[5], item[27])
+    let di3 = visits.map(item => [item[5], item.[28]) 
+  
     new Chart(ctx, {
     type: 'line',
     data: {
