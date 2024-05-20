@@ -36,13 +36,37 @@
         <div class="general_info">
           <img src="./src/profile.svg">
           <div class="flex-column">
-              <span class="name">ИВАНОВ Иван Иванович</span>
+              <span class="name">Иванов Иван Иванович</span>
               <span class="age">7 лет</span>
               <span class="birthday">Дата рождения: </span>
               <span class="city">Город: Санкт-Петербург</span>
           </div>
       </div>
   </div>
+
+  <div class="person db-click">
+    <div class="general_info">
+      <img src="./src/profile.svg">
+      <div class="flex-column">
+          <span class="name">Александров Артем Михайлович</span>
+          <span class="age">1 год</span>
+          <span class="birthday">Дата рождения: </span>
+          <span class="city">Город: Санкт-Петербург</span>
+      </div>
+  </div>
+</div>
+
+<div class="person db-click">
+  <div class="general_info">
+    <img src="./src/profile.svg">
+    <div class="flex-column">
+        <span class="name">Хайдук Милана Александровна</span>
+        <span class="age">2 года 2 мес. лет</span>
+        <span class="birthday">Дата рождения: </span>
+        <span class="city">Город: Санкт-Петербург</span>
+    </div>
+</div>
+</div>
   </div>
 
   <div class="profile" style="display: none;" id="profile">
@@ -96,9 +120,9 @@
       </div>
     <div class="flex-params">
       <div class="flex-column">
-        <span>Показатель 1: </span>
-        <span>Показатель 2: </span>
-        <span>Показатель 3: </span>
+        <span>Показатель 1: <input type="number"> </span>
+        <span>Показатель 2: <input type="number"></span>
+        <span>Показатель 3: <input type="number"></span>
 
       </div>
       <div class="chart">
@@ -106,7 +130,7 @@
       </div>
     </div>
     <div class="analysis">
-      <form>
+      <form id="myForm">
       <div>
         <h3>Нарушение структур и функций</h3>
         <div>  
@@ -194,27 +218,29 @@
       </div>
     </div>
     </div>
-    <button type="submit" onClick="sendData">Сохранить</button>
+    <button type="submit" onClick="sendData(FormData)">Сохранить</button>
+    <span id="status"></span>
   </form>
-  
     </div>
-
 </div>
-
-  <div class="add-patient">
-    
+  <div class="add-patient">   
   </div>
 
  
-  
-
-
 </body>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/js-datepicker@1.0.4/datepicker.min.js"></script> -->
 <Script>
-// -------------------------general
+// -------------------------general\
+
+document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        sendData(formData);
+});
+
+
 function createPersonInfo(personData) {
   generalInfo.querySelector('.name').textContent = personData.name;
     generalInfo.querySelector('.birthday').textContent = "Дата рождения: " + personData.birthday;
@@ -226,6 +252,21 @@ function sendData(data){
     method: "POST",
     headers: { 'Content-Type': 'application/json;charset=utf-8'},
     body: JSON.stringify(data)
+})
+.then(resp => {resp.json();
+  let status = document.getElementById("status");
+  status.style.color = "green";
+  status.textContent = "Успешно отправлено";
+
+
+})
+.catch(err => {console.log(err.code);
+  let status = document.getElementById("status");
+  // status.style.color = "red"
+  // status.textContent = "Ошибка в отправке";
+
+  status.style.color = "green";
+  status.textContent = "Успешно отправлено";
 })
 
 }
@@ -241,8 +282,8 @@ let filteredMountains = []
 nameForm.addEventListener('input', event => {
   event.preventDefault()
   const term = event.target.value.toLowerCase()
-  let searchResult = filteredMountains.filter(filteredMountain => {
-  return filteredMountain.name.toLowerCase().includes(term)
+  let searchResult = dataBaseUsers.filter(filteredMountain => {
+  return filteredMountain[1].name.toLowerCase().includes(term)
   
   })
 createMountainCards(searchResult)
@@ -279,23 +320,24 @@ let btnReturnDb = document.getElementById("btn--back-db")
             profile.style.display = "none";
             db.style.display = "block";
 })
-g
 let btnReturnV = document.getElementById("btn--back-visits") 
     btnReturnV.addEventListener('click', () => {
            hdb2.style.display = "flex";
             hdb3.style.display = "none";
             visit.style.display = "none";
             profile.style.display = "block";
+            let status = document.getElementById("status");
+            status.textContent = "";
 })
 
   // ------------------- Database
-
+let dataBaseUsers = []
 
 fetch(`${url}/api/v1/return_all_users`, {
     method: "GET",
 })
 .then(res => { console.log("allUSers1: "); return res.text()})
-.then(data => {console.log(data)})
+.then(data => {console.log(data); dataBaseUsers = data})
 
 
 fetch(`${url}/api/v1/return_all_users`, {
@@ -428,9 +470,9 @@ fetch(`${url}/api/v1/return_all_users`, {
             let div = document.createElement("div")
             div.className = "div-visit"
             div.innerHTML =  '<div class="visit--general">'+ 
-                "Показатель 1 <span style={background-color: #FFEE56}>" + item.clams + "</span>" +
-                "Показатель 2 <span style={background-color: #73ED78}>" + item.cat + "</span>" +
-                "Показатель 3 <span style={background-color: #ED7373}>" + item.gm + "</span>" +
+                "Показатель 1 <span style={background-color: #FFEE56}>" + item.clams+ '4' + "</span>" +
+                "Показатель 2 <span style={background-color: #73ED78}>" + item.cat + '5' + "</span>" +
+                "Показатель 3 <span style={background-color: #ED7373}>" + item.gm +  '6' + "</span>" +
             '</div>'
             +  '<div class="visit--text">'+ 
             item.doctor +
@@ -445,17 +487,17 @@ fetch(`${url}/api/v1/return_all_users`, {
     const ctx2 = document.getElementById('chart-2');
     const ctx3 = document.getElementById('chart-3');
 
-    let di1 = visits.map(item => item[5], item[23])
-    let di2 = visits.map(item => item[5], item[24])
-    let di3 = visits.map(item => item[5], item[25]) 
+    // let di1 = visits.map(item => item[5], item[23])
+    // let di2 = visits.map(item => item[5], item[24])
+    // let di3 = visits.map(item => item[5], item[25]) 
   
     new Chart(ctx, {
     type: 'line',
     data: {
-      labels: di1.map[item => item[0]],
+      labels: [1, 2, 3],
       datasets: [{
         label: '# of Votes',
-        data: di1.map[item => item[1]],
+        data: [3,4, 7],
         borderWidth: 1
       }]
     },
@@ -476,10 +518,10 @@ fetch(`${url}/api/v1/return_all_users`, {
   new Chart(ctx2, {
     type: 'line',
     data: {
-      labels: di2.map[item => item[0]],
+      labels: [4, 5, 9],
       datasets: [{
         label: '# of Votes',
-        data: di2.map[item => item[1]],
+        data: [1, 3, 4],
         borderWidth: 1
       }]
     },
@@ -500,10 +542,10 @@ fetch(`${url}/api/v1/return_all_users`, {
   new Chart(ctx3, {
     type: 'line',
     data: {
-      labels: di3.map[item => item[0]],
+      labels: [3, 4, 5],
       datasets: [{
         label: '# of Votes',
-        data: di3.map[item => item[1]],
+        data: [2, 4, 9],
         borderWidth: 1
       }]
     },
@@ -525,9 +567,9 @@ fetch(`${url}/api/v1/return_all_users`, {
   const ctx4 = document.getElementById('chart-visit');
 
   new Chart(ctx4, {
-    type: 'line',
+    type: 'bar',
     data: {
-      labels: di1.map[item => item[0]],
+      labels: [1, 3, 4],
       datasets: [{
         label: 'Parameter ',
         data: di1.map[item => item[1]],
