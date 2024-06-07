@@ -18,54 +18,6 @@ DB_NAME = os.environ.get("DB_NAME")
 warnings.simplefilter("always")
 
 
-async def create_data():
-    connection = None
-
-    try:
-        connection = psycopg2.connect(
-            host=HOST,
-            port=PORT,
-            user=USER,
-            password=PASSWORD,
-            database=DB_NAME
-        )
-        connection.autocommit = True
-
-        with connection.cursor() as cursor:
-            cursor.execute(
-                F"""CREATE TABLE {DB_NAME}(
-                        id INT,
-                        name varchar(100),
-                        second_name varchar(100),
-                        patronymic varchar(100),
-                        birth_data varchar(50),
-                        death_data varchar(50),
-                        birth_place varchar(100),
-                        death_place varchar(100),
-                        partner varchar(100),
-                        kind varchar(100),
-                        workplace varchar(100),
-                        awards varchar(100),
-                        epitaph varchar(10000),
-                        biography_1 varchar(10000),
-                        biography_2 varchar(10000),
-                        biography_3 varchar(10000),
-                        biography_4 varchar(10000),
-                        word_familiar varchar(10000)
-                        );
-                        """
-            )
-        print("[INFO] Table created")
-
-    except Exception as _ex:
-        warnings.warn(f"Error: {_ex}")
-        return "error"
-
-    finally:
-        if connection:
-            connection.close()
-
-        return "ok"
 
 
 
@@ -173,7 +125,7 @@ async def add_new_reception(patient_data):
                 INSERT INTO reception 
                 (id, full_name, age, parents_name, address, date_of_visit, specialists_name, meeting_format, personal_factors, neurosurgery, 
                 sensitivity, neurourology, mobility, self_service, TCP, neuroorthopedics, coloproctology, productive_activity, leisure, communication, 
-                ophthalmology, height_and_weight, smart_functions, pain, tasks, other)
+                ophthalmology, height_and_weight, smart_functions, pain, tasks, other, clams, cat, gm)
                 VALUES 
                 (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
@@ -186,7 +138,7 @@ async def add_new_reception(patient_data):
                 patient_data.self_service, patient_data.TCP, patient_data.neuroorthopedics,
                 patient_data.coloproctology, patient_data.productive_activity, patient_data.leisure,
                 patient_data.communication, patient_data.ophthalmology, patient_data.height_and_weight,
-                patient_data.smart_functions, patient_data.pain, patient_data.tasks, patient_data.other
+                patient_data.smart_functions, patient_data.pain, patient_data.tasks, patient_data.other, patient_data.clams, patient_data.cat, patient_data.gm
             )
 
             cursor.execute(query, values)

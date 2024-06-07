@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile, File, Form, Request, Response
 from fastapi.responses import JSONResponse
 import asyncio
 from pydantic import BaseModel
-import app.internal.database.db as db
+import app.internal.database.db_sqlite3 as db
 from typing import Dict
 from time import sleep
 import pandas as pd
@@ -58,6 +58,9 @@ class DataReception(BaseModel):
     pain: str
     tasks: str
     other: str
+    clams: int
+    cat: int
+    gm: int
 
 
 class TG_id(BaseModel):

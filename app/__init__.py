@@ -15,3 +15,5 @@ def create_app(_=None) -> FastAPI:
     )
 
     return Server(app).get_app()
+
+
